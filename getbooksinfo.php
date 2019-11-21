@@ -22,8 +22,9 @@
         'command' => $command, 
         'livre' => $id,
         'achete' => "non",
+        'prixnumerique' => $prixnumerique
     ];
-    $sql=$pdo->prepare("INSERT into tbl_commands (command, livre, achete) VALUES(:command, :livre, :achete)");
+    $sql=$pdo->prepare("INSERT into tbl_commands (command, livre, achete, prixnumerique) VALUES(:command, :livre, :achete, :prixnumerique)");
 
     $sql->execute($data);
         
