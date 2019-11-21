@@ -185,15 +185,15 @@
                     <div class="dragArea row">
                         <div class="col-md-4  form-group" data-for="name">
                             <label for="name-form1-5n" class="form-control-label mbr-fonts-style display-7">Nom</label>
-                            <input type="text" name="name" data-form-field="Name" required="required" class="form-control display-7" id="name-form1-5n">
+                            <input type="text" id="name" name="name" data-form-field="Name" required="required" class="form-control display-7" id="name-form1-5n">
                         </div>
                         <div class="col-md-4  form-group" data-for="email">
                             <label for="email-form1-5n" class="form-control-label mbr-fonts-style display-7">Email</label>
-                            <input type="email" name="email" data-form-field="Email" required="required" class="form-control display-7" id="email-form1-5n">
+                            <input id="email" type="email" name="email" data-form-field="Email" required="required" class="form-control display-7" id="email-form1-5n">
                         </div>
                         <div data-for="phone" class="col-md-4  form-group">
                             <label for="phone-form1-5n" class="form-control-label mbr-fonts-style display-7">Telephone</label>
-                            <input type="tel" name="phone" data-form-field="Phone" class="form-control display-7" id="phone-form1-5n">
+                            <input type="tel" id="phone" name="phone" data-form-field="Phone" class="form-control display-7" id="phone-form1-5n">
                         </div>
                         <!--
                         <div data-for="message" class="col-md-12 form-group">
@@ -306,7 +306,7 @@
   <script src="assets/viewportchecker/jquery.viewportchecker.js"></script>
   <script src="assets/parallax/jarallax.min.js"></script>
   <script src="assets/theme/js/script.js"></script>
-  <script src="assets/formoid/formoid.min.js"></script>
+  <!--<script src="assets/formoid/formoid.min.js"></script>-->
   <script type="text/javascript">
     $(document).ready(function(){
         $("a.btn-acheter").click(function(event){
@@ -314,6 +314,7 @@
             $("<input>").attr({
                 type:"hidden",
                 name:"id-livre",
+                id:"id-livre",
                 value: $(this).attr('id')
             }).appendTo($("#myform-livre"))
         });
@@ -322,24 +323,28 @@
             $.ajax({
                 url:"getbooksinfo.php", 
                 method:"GET",
-                data:{id:$(this).attr("id")},
+                data:{
+                    id:$("#id-livre").val(),
+                    phone:$("#phone").val()
+                },
                 success:function(data){
+                    data = JSON.parse(data);
                     const fields = {
                         "cmd":"start",
-                        "rN":"testeur",
-                        "rT":this.state.phone,
-                        "rE":this.state.email,
-                        "rH":"EL156T672281",
-                        "rI":command,
-                        "rMt":this.props.value.cartTotal,
+                        "rN":"WIGC",
+                        "rT":$("#phone").val(),
+                        "rE":$("#email").val(),
+                        "rH":"WA197M601771",
+                        "rI":data.command,
+                        "rMt":data.prixnumerique,
                         "rDvs":"XAF",
                         "rLocale":"fr",
-                        "source":"EIF Consulting E-commerce",
-                        "endPage":"https://eifconsulting-ecommerce.herokuapp.com/successdohone",
-                        "notifyPage":"https://eifconsulting-ecommerce.herokuapp.com/notifydohone",
-                        "cancelPage":"https://eifconsulting-ecommerce.herokuapp.com/canceldohone",
-                        "logo":"https://eifconsulting-ecommerce.herokuapp.com/images/logo/logo.jpg",
-                        "motif":"Payement d'un plan"
+                        "source":"WIGC E-commerce",
+                        "endPage":"http://wigccameroun.org/endPage.php",
+                        "notifyPage":"http://wigccameroun.org/notifyPage.php",
+                        "cancelPage":"http://wigccameroun.org/cancelPage.php",
+                        "logo":"http://wigccameroun.org/assets/images/imageedit-1-9898143526-133x134.png",
+                        "motif":"Payement d'un livre"
                     };
                     var $form = $('<form>', {
                         action: 'https://www.my-dohone.com/dohone/pay',
@@ -353,6 +358,7 @@
                         }).appendTo($form);
                     });
                     $form.appendTo('body').submit();
+                    
                 },
                 error:function(){
                     alert("Erreur de récupération des informations");
