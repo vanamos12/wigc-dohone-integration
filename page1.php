@@ -109,7 +109,7 @@
             $query->execute();
 
             while($row = $query->fetch()){
-
+                
 
         ?>
             <!--Card-1-->
@@ -140,8 +140,8 @@
                                     <!--Cost-->
                                     <p class="mbr-text mbr-fonts-style col-right mbr-black align-center display-7"><strong> <?php echo $row["titre"]; ?> annotée</strong><br><strong><br></strong>***************<strong><br></strong>&nbsp; &nbsp; &nbsp; Papier &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Numérique<br>&nbsp; &nbsp; <?php echo $row["prixpapier"]; ?> Fcfa &nbsp; &nbsp; &nbsp; &nbsp;<?php echo $row["prixnumerique"]; ?> Fcfa <br><br></p>
                                     <!--Btn-->
-                                    <div class="mbr-section-btn col-right align-center"><span href="page5.php#form1-56" class="btn-achter btn m-0 btn-primary display-4">
-                                            Acheter</span></div>
+                                    <div class="mbr-section-btn col-right align-center"><a id="<?php echo $row["Information_ID"]; ?>" href="#form1-5n" class="btn-acheter btn m-0 btn-primary display-4">
+                                            Acheter</a></div>
                                 </div>
                             </div>
                         </div>
@@ -166,8 +166,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="title col-12 col-lg-8">
-                <h2 class="mbr-section-title align-center pb-3 mbr-fonts-style display-2"><strong>SOUTENIR NOS ACTIONS</strong></h2>
-                <h3 class="mbr-section-subtitle align-center mbr-light pb-3 mbr-fonts-style display-5">Faire un don ponctuel pour rejoindre notre réseau de donateur pour mener des actions au cameroun, agir depuis chez vous. Il y a mille façons de vous engager à nos côtés et grâce à votre aide nous pouvons construire un monde meilleur pour tous les enfants et necessiteux.
+                <h2 class="mbr-section-title align-center pb-3 mbr-fonts-style display-2"><strong>Formulaire d'achat de livres</strong></h2>
+                <h3 class="mbr-section-subtitle align-center mbr-light pb-3 mbr-fonts-style display-5">Veuillez remplir vos informations pour continuer la procédure d'achat des livres.
 <div><br></div></h3>
             </div>
         </div>
@@ -176,7 +176,7 @@
         <div class="row justify-content-center">
             <div class="media-container-column col-lg-8" data-form-type="formoid">
                 <!---Formbuilder Form--->
-                <form action="https://mobirise.com/" method="POST" class="mbr-form form-with-styler" data-form-title="Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="IG/C/ERS8e2MrT4f1dvCb9FDWgY8mEVUUnWQDgLeuYEAclrD1wVhODIQ/8PVkFoGUA7+c2CA0AIChMRZiUMHPxt4P+NqzQ13kDia+ucYr+aXi3w+jqfaprM9dQPHQLMc">
+                <form action="" id="myform-livre" method="POST" class="mbr-form form-with-styler" data-form-title="Mobirise Form"><input type="hidden" name="email" data-form-email="true" value="IG/C/ERS8e2MrT4f1dvCb9FDWgY8mEVUUnWQDgLeuYEAclrD1wVhODIQ/8PVkFoGUA7+c2CA0AIChMRZiUMHPxt4P+NqzQ13kDia+ucYr+aXi3w+jqfaprM9dQPHQLMc">
                     <div class="row">
                         <div hidden="hidden" data-form-alert="" class="alert alert-success col-12">Thanks for filling out the form!</div>
                         <div hidden="hidden" data-form-alert-danger="" class="alert alert-danger col-12">
@@ -195,11 +195,13 @@
                             <label for="phone-form1-5n" class="form-control-label mbr-fonts-style display-7">Telephone</label>
                             <input type="tel" name="phone" data-form-field="Phone" class="form-control display-7" id="phone-form1-5n">
                         </div>
+                        <!--
                         <div data-for="message" class="col-md-12 form-group">
                             <label for="message-form1-5n" class="form-control-label mbr-fonts-style display-7">Message</label>
                             <textarea name="message" data-form-field="Message" class="form-control display-7" id="message-form1-5n"></textarea>
                         </div>
-                        <div class="col-md-12 input-group-btn align-center"><button type="submit" class="btn btn-form btn-secondary display-4" href="mailto:michelkenmogne@wigccameroun.com">VALIDER</button></div>
+                        -->
+                        <div class="col-md-12 input-group-btn align-center"><button type="submit" class="btn btn-form btn-secondary display-4">VALIDER L'ACHAT</button></div>
                     </div>
                 </form><!---Formbuilder Form--->
             </div>
@@ -291,7 +293,7 @@
         </div>
     </div>
 </section>
-
+    
 
   <script src="assets/web/assets/jquery/jquery.min.js"></script>
   <script src="assets/popper/popper.min.js"></script>
@@ -307,9 +309,59 @@
   <script src="assets/formoid/formoid.min.js"></script>
   <script type="text/javascript">
     $(document).ready(function(){
-        $(".btn-acheter").click(function(event){
+        $("a.btn-acheter").click(function(event){
             event.preventDefault();
-            console.log("I clicked.");
+            $("<input>").attr({
+                type:"hidden",
+                name:"id-livre",
+                value: $(this).attr('id')
+            }).appendTo($("#myform-livre"))
+        });
+        $("#myform-livre").submit(function(event){
+            event.preventDefault();
+            $.ajax({
+                url:"getbooksinfo.php", 
+                method:"GET",
+                data:{id:$(this).attr("id")},
+                success:function(data){
+                    const fields = {
+                        "cmd":"start",
+                        "rN":"testeur",
+                        "rT":this.state.phone,
+                        "rE":this.state.email,
+                        "rH":"EL156T672281",
+                        "rI":command,
+                        "rMt":this.props.value.cartTotal,
+                        "rDvs":"XAF",
+                        "rLocale":"fr",
+                        "source":"EIF Consulting E-commerce",
+                        "endPage":"https://eifconsulting-ecommerce.herokuapp.com/successdohone",
+                        "notifyPage":"https://eifconsulting-ecommerce.herokuapp.com/notifydohone",
+                        "cancelPage":"https://eifconsulting-ecommerce.herokuapp.com/canceldohone",
+                        "logo":"https://eifconsulting-ecommerce.herokuapp.com/images/logo/logo.jpg",
+                        "motif":"Payement d'un plan"
+                    };
+                    var $form = $('<form>', {
+                        action: 'https://www.my-dohone.com/dohone/pay',
+                        method: 'post'
+                    });
+                    $.each(fields, function(key, val) {
+                        $('<input>').attr({
+                            type: "hidden",
+                            name: key,
+                            value: val
+                        }).appendTo($form);
+                    });
+                    $form.appendTo('body').submit();
+                },
+                error:function(){
+                    alert("Erreur de récupération des informations");
+                }
+            })
+        });
+        $("span.btn-acheter-1").click(function(event){
+            event.preventDefault();
+            
         });
     });
   </script>
