@@ -14,6 +14,7 @@
     $prixnumerique = $row["prixnumerique"];
     $command = $phone.'-'.rand(0, PHP_INT_MAX);
 
+    // On met en place les sessions et les cookies
     $_SESSION["command"] = $command;
     setcookie("command", $command, time()+(3600*2), "/");
 
