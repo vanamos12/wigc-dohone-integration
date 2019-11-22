@@ -16,7 +16,7 @@
 
     // On met en place les sessions et les cookies
     $_SESSION["command"] = $command;
-    setcookie("command", $command, time()+(3600*2), "/");
+    setcookie("command", $command, time()+(3600*24*30), "/");
 
     // On met à jour la table commands pour savoir si on a acheté les livres
     $data = [
