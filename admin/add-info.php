@@ -55,7 +55,10 @@ require("libs/config.php");
                                 <textarea class="form-control input" name="description" rows="3" data-form-field="Message" style="resize:none" id="message-form4-1b"></textarea>
                             </div>
                             
-                            
+                            <div class="col-md-12" data-for="name">
+                            <label class="control-label" for="input01">Fichier Livre ( PDF ):</label>
+                                <input type="file" class="form-control input" name="livreachete" class="font" required> 
+                            </div>
                             <!--<div class="col-md-12" data-for="name">
                             <label class="control-label" for="input01">Fichier pdf:</label>
                                 <input type="file" class="form-control input" name="pdf" class="font" required> 
@@ -84,12 +87,17 @@ require("libs/config.php");
 		//$brief = $_POST['brief'];
 		//$content = $_POST['content'];
 		$image = addslashes(file_get_contents($_FILES['image']['tmp_name']));
-                                $image_name = addslashes($_FILES['image']['name']);
-                                $image_size = getimagesize($_FILES['image']['tmp_name']);
+        $image_name = addslashes($_FILES['image']['name']);
+        $image_size = getimagesize($_FILES['image']['tmp_name']);
 
-                                $random_number = mt_rand();
-                                $Photo = "upload/" . $random_number . $_FILES["image"]["name"];
-                                move_uploaded_file($_FILES["image"]["tmp_name"], $Photo);
+        $random_number = mt_rand();
+        $Photo = "upload/" . $random_number . $_FILES["image"]["name"];
+        move_uploaded_file($_FILES["image"]["tmp_name"], $Photo);
+
+        $livreachete = "upload/" . $random_number . $_FILES["livreachete"]["name"];
+        move_uploaded_file($_FILES["livreachete"]["tmp_name"], $livreachete);
+
+
                                 
 		/*$pdf = addslashes(file_get_contents($_FILES['pdf']['tmp_name']));
 
@@ -115,9 +123,10 @@ require("libs/config.php");
             'autreediteur' => $reediteur, 
             'prixpapier' => $prixpapier, 
             'prixnumerique' => $prixnumerique, 
-            'contenu' => $description
+            'contenu' => $description,
+            'livreachete' => $livreachete
         ];
-        $sql=$pdo->prepare("INSERT into tbl_livres (Photo, titre, auteur, parution, editeur, autreediteur, prixpapier, prixnumerique, contenu) VALUES(:Photo, :titre, :auteur, :parution, :editeur, :autreediteur, :prixpapier, :prixnumerique, :contenu)");
+        $sql=$pdo->prepare("INSERT into tbl_livres (Photo, titre, auteur, parution, editeur, autreediteur, prixpapier, prixnumerique, contenu, livreachete) VALUES(:Photo, :titre, :auteur, :parution, :editeur, :autreediteur, :prixpapier, :prixnumerique, :contenu, :livreachete)");
 
         if ($sql->execute($data)){
             echo "inclus";
@@ -126,15 +135,7 @@ require("libs/config.php");
         }
         echo $reediteur."<br/>";
 
-        /*echo $Photo."<br/>";
-        echo $titre."<br/>";
-        echo $auteur."<br/>";
-        echo $parution."<br/>";
-        echo $editeur."<br/>";
-        	
-        echo $prixpapier."<br/>";
-        echo $prixnumerique."<br/>";
-        echo $description."<br/>";*/
+        
 			
 	    header('location:info.php');
 		
