@@ -3,15 +3,22 @@
     include('admin/dbcon.php');
 
     require("admin/libs/config.php");
+    $id = "1";
+    $phone = "";
 
-    $id = $_GET['id'];
-    $phone = $_GET['phone'];
-
+    if (isset($_GET['id']) && isset($_GET['phone'])){
+        $id = $_GET['id'];
+        $phone = $_GET['phone'];
+    }
+    
     // On récupère le prix numérique du livre
     $res = $pdo->query("SELECT * FROM tbl_livres WHERE Information_ID = ".$id);
 
-	$row = $res->fetch();
-    $prixnumerique = $row["prixnumerique"];
+    $prixnumerique = "0";
+	if ($row = $res->fetch()){
+        $prixnumerique = $row["prixnumerique"];
+    }
+    
     $command = $phone.'-'.rand(0, PHP_INT_MAX);
 
     // On met en place les sessions et les cookies

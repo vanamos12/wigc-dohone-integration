@@ -28,8 +28,13 @@
   <link rel="stylesheet" href="assets/theme/css/style.css">
   <link rel="stylesheet" href="assets/mobirise/css/mbr-additional.css" type="text/css">
   
-  
-  
+  <style>
+      #errors{
+          text-align: center;
+          color:red;
+          list-style-type: none;
+      }
+  </style>
 </head>
 <body>
   <section class="menu cid-ruZckFmgH6" once="menu" id="menu1-2a">
@@ -311,6 +316,7 @@
     $(document).ready(function(){
         $("a.btn-acheter").click(function(event){
             event.preventDefault();
+            $("#id-livre").remove();
             $("<input>").attr({
                 type:"hidden",
                 name:"id-livre",
@@ -318,52 +324,92 @@
                 value: $(this).attr('id')
             }).appendTo($("#myform-livre"))
         });
+        function validateEmail(email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+        function validateName(name){
+            if (name === ""){
+                return false;
+            }
+            return true;
+        }
+        function validateNumero(numero){
+            return /\d+/.test(numero);
+        }
+        function validate(email, name, numero){
+            let response = "";
+            if (!validateEmail(email)){
+                response += "<li>Votre email n'est pas valide</li>"
+            }
+            if (!validateName(name)){
+                response += "<li>Votre nom n'est pas valide</li>"
+            }
+            if (!validateNumero(numero)){
+                response += "<li>Votre numéro n'est pas valide</li>"
+            }
+            return response;
+        }
+
         $("#myform-livre").submit(function(event){
             event.preventDefault();
-            $.ajax({
-                url:"getbooksinfo.php", 
-                method:"GET",
-                data:{
-                    id:$("#id-livre").val(),
-                    phone:$("#phone").val()
-                },
-                success:function(data){
-                    data = JSON.parse(data);
-                    const fields = {
-                        "cmd":"start",
-                        "rN":"WIGC",
-                        "rT":$("#phone").val(),
-                        "rE":$("#email").val(),
-                        "rH":"WA197M601771",
-                        "rI":data.command,
-                        "rMt":data.prixnumerique,
-                        "rDvs":"XAF",
-                        "rLocale":"fr",
-                        "source":"WIGC E-commerce",
-                        "endPage":"http://wigccameroun.org/endPage.php",
-                        "notifyPage":"http://wigccameroun.org/notifyPage.php",
-                        "cancelPage":"http://wigccameroun.org/cancelPage.php",
-                        "logo":"http://wigccameroun.org/assets/images/imageedit-1-9898143526-133x134.png",
-                        "motif":"Payement d'un livre"
-                    };
-                    var $form = $('<form>', {
-                        action: 'https://www.my-dohone.com/dohone/pay',
-                        method: 'post'
-                    });
-                    $.each(fields, function(key, val) {
-                        $('<input>').attr({
-                            type: "hidden",
-                            name: key,
-                            value: val
-                        }).appendTo($form);
-                    });
-                    $form.appendTo('body').submit();
-                    
-                },
-                error:function(){
-                    alert("Erreur de récupération des informations");
-                }
-            })
+            let response = validate($("#email").val(), $("#name").val(), $("#phone").val())
+            console.log(response);
+            if (response !== ""){
+                $("<ul>", {
+                    id:"errors",
+                    html:response
+                }).appendTo($("#myform-livre"));
+            }
+            else{
+                $.ajax({
+                    url:"getbooksinfo.php", 
+                    method:"GET",
+                    data:{
+                        id:$("#id-livre").val(),
+                        phone:$("#phone").val()
+                    },
+                    success:function(data){
+                        data = JSON.parse(data);
+                        const fields = {
+                            "cmd":"start",
+                            "rN":"WIGC",
+                            "rT":$("#phone").val(),
+                            "rE":$("#email").val(),
+                            //"rH":"WA197M601771",
+                            "rH":"FY786K4327",
+                            "rI":data.command,
+                            "rMt":data.prixnumerique,
+                            "rDvs":"XAF",
+                            "rLocale":"fr",
+                            "source":"WIGC E-commerce",
+                            "endPage":"http://wigccameroun.org/endPage.php",
+                            "notifyPage":"http://wigccameroun.org/notifyPage.php",
+                            "cancelPage":"http://wigccameroun.org/cancelPage.php",
+                            "logo":"http://wigccameroun.org/assets/images/imageedit-1-9898143526-133x134.png",
+                            "motif":"Payement d'un livre"
+                        };
+                        var $form = $('<form>', {
+                            //action: 'https://www.my-dohone.com/dohone/pay',
+                            action: 'https://www.my-dohone.com/dohone-sandbox/pay',
+                            method: 'post'
+                        });
+                        $.each(fields, function(key, val) {
+                            $('<input>').attr({
+                                type: "hidden",
+                                name: key,
+                                value: val
+                            }).appendTo($form);
+                        });
+                        $form.appendTo('body').submit();
+                        
+                    },
+                    error:function(){
+                        alert("Erreur de récupération des informations");
+                    }
+                })
+            }
+            /**/
         });
         $("span.btn-acheter-1").click(function(event){
             event.preventDefault();
