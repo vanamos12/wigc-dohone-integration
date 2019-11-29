@@ -37,8 +37,8 @@
     $rMt = $_GET['rMt'];
     $rDvs = $_GET['rDvs'];
     $rH = $_GET['rH'];
-    //$codeMarchant = "WA197M601771";
-    $codeMarchant = "FY786K4327";
+    $codeMarchant = "WA197M601771";
+    //$codeMarchant = "FY786K4327";
 
     $query = $pdo->prepare("select * from tbl_commands where command=:command");
 

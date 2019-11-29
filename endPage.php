@@ -72,7 +72,7 @@
                     console.log(data);
                     if (data.bookbuyed) {
                         $("<a>", {
-                            html: "Download"
+                            html: "Cliquez ici pour votre livre"
                         }).attr({
                             href: "download.php?file=" + data.bookname
                         }).appendTo($('.panel'));

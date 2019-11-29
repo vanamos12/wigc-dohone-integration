@@ -376,8 +376,8 @@
                             "rN":"WIGC",
                             "rT":$("#phone").val(),
                             "rE":$("#email").val(),
-                            //"rH":"WA197M601771",
-                            "rH":"FY786K4327",
+                            "rH":"WA197M601771",
+                            //"rH":"FY786K4327",
                             "rI":data.command,
                             "rMt":data.prixnumerique,
                             "rDvs":"XAF",
@@ -390,8 +390,8 @@
                             "motif":"Payement d'un livre"
                         };
                         var $form = $('<form>', {
-                            //action: 'https://www.my-dohone.com/dohone/pay',
-                            action: 'https://www.my-dohone.com/dohone-sandbox/pay',
+                            action: 'https://www.my-dohone.com/dohone/pay',
+                            //action: 'https://www.my-dohone.com/dohone-sandbox/pay',
                             method: 'post'
                         });
                         $.each(fields, function(key, val) {
