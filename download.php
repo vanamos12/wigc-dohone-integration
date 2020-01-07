@@ -2,7 +2,7 @@
     if (isset($_REQUEST["file"])){
         // Get parameters
         $file = $_REQUEST["file"];
-        $filepath = "admin/" . $file;
+        $filepath = "admin/" . urldecode($file);
 
         // Process download
         if (file_exists($filepath)){
